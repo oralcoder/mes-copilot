@@ -10,21 +10,21 @@ from middlewares.jwt_middleware import JWTMiddleware
 
 # 로깅 설정
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="MES Copilot Demo")
+app = FastAPI(title='MES Copilot Demo')
 
 # CORS 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost"],  # 허용할 도메인
+    allow_origins=['http://localhost'],  # 허용할 도메인
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=['*'],
+    allow_headers=['*'],
 )
 
 # Add custom middleware
@@ -41,10 +41,12 @@ app.include_router(data_summary.router)
 app.include_router(weather_router)
 
 
-@app.get("/")
+@app.get('/')
 def read_root():
-    logger.debug("main endpoint")
-    return {"message": "MES Copilot API is running"}
+    # DEBUG 레벨 로그는 비용이 들 수 있는 연산(포맷팅 등)을 하기 전에 레벨을 확인하는 것이 더 효율적입니다.
+    if logger.isEnabledFor(logging.DEBUG):
+        logger.debug('main endpoint')
+    return {'message': 'MES Copilot API is running'}
 
 
 unused_var = 10
